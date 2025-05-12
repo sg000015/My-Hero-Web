@@ -14,8 +14,6 @@ canvas {
   height: 100%;
 }
 
-
-
 #loader {
   left: 0;
   top: 0;
@@ -24,8 +22,6 @@ canvas {
   height: 100vh;
   background-color: #000000;
 }
-
-
 
 .loadingText {
   position: absolute;
