@@ -48,9 +48,9 @@
 
       createUnityInstance(canvas, {
         arguments: [],
-        dataUrl: `Build/Build.data`,
-        frameworkUrl: `Build/Build.framework.js`,
-        codeUrl: `Build/Build.wasm`,
+        dataUrl: `Build/Build.data.unityweb`,
+        frameworkUrl: `Build/Build.framework.js.unityweb`,
+        codeUrl: `Build/Build.wasm.unityweb`,
         streamingAssetsUrl: "StreamingAssets",
         companyName: "OG-SOFT",
         productName: "My-Hero",
@@ -60,7 +60,7 @@
         unityInstance = result;
 
         loader.style.display = "none";
-        unityInstance.SendMessage("StoryManager", "LoadScene", "001");
+        // unityInstance.SendMessage("StoryManager", "LoadScene", "001");
         // unityInstance.SendMessage("StoryManager", "SendUserName", JSON.stringify({ p: parity, nickname: name }));
 
       }).catch((err) => {
