@@ -77,8 +77,6 @@
       if (event.data.startsWith("i_")) { parity = event.data.slice(2); }
       if (event.data.startsWith("n_")) { name = event.data.slice(2); }
       if (event.data.startsWith("s_")) { scene = event.data.slice(2); }
-
-      condole.log(event.data);
     });
 
     document.addEventListener('keydown', function (e) {
