@@ -43,28 +43,48 @@
     // 페이지 로드 시 실행
     window.addEventListener("DOMContentLoaded", loadUnityWithEtag);
 
+
+    async function getEtag(url) {
+      try {
+        const response = await fetch(url, { method: "HEAD" }); // HEAD 요청
+        return response.headers.get("etag"); // eTag 값 가져오기
+      } catch (error) {
+        console.error(`Failed to fetch eTag for ${url}:`, error);
+        return null;
+      }
+    }
+
     function loadUnityWithEtag() {
       const canvas = document.querySelector("#unity-canvas");
 
-      createUnityInstance(canvas, {
-        arguments: [],
-        dataUrl: `Build/Build.data.unityweb`,
-        frameworkUrl: `Build/Build.framework.js.unityweb`,
-        codeUrl: `Build/Build.wasm.unityweb`,
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "OG-SOFT",
-        productName: "My-Hero",
-        productVersion: "0.1.0",
-      }).then((result) => {
-        loaded = true;
-        unityInstance = result;
+      getEtag("Build/Build.framework.js.unityweb").then(eTag => {
+        if (!eTag) {
+          console.error("eTag not found. Loading without cache.");
+        }
 
-        loader.style.display = "none";
-        unityInstance.SendMessage("StoryManager", "LoadScene", scene);
-        // unityInstance.SendMessage("StoryManager", "SendUserName", JSON.stringify({ p: parity, nickname: name }));
+        console.log("eTag:", eTag);
 
-      }).catch((err) => {
-        console.log(err);
+
+        createUnityInstance(canvas, {
+          arguments: [],
+          dataUrl: `Build/Build.data.unityweb?etag=${eTag}`,
+          frameworkUrl: `Build/Build.framework.js.unityweb?etag=${eTag}`,
+          codeUrl: `Build/Build.wasm.unityweb?etag=${eTag}`,
+          streamingAssetsUrl: "StreamingAssets",
+          companyName: "OG-SOFT",
+          productName: "My-Hero",
+          productVersion: "0.1.0",
+        }).then((result) => {
+          loaded = true;
+          unityInstance = result;
+
+          loader.style.display = "none";
+          unityInstance.SendMessage("StoryManager", "LoadScene", scene);
+          // unityInstance.SendMessage("StoryManager", "SendUserName", JSON.stringify({ p: parity, nickname: name }));
+
+        }).catch((err) => {
+          console.log(err);
+        });
       });
     }
 
